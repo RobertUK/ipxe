@@ -26,7 +26,7 @@ FILE_LICENCE ( GPL2_OR_LATER_OR_UBDL );
  * initialisation vector, thus rendering the banner almost invisible
  * to the user.
  */
-#define BANNER_TIMEOUT		20
+#define BANNER_TIMEOUT		40
 #define ROM_BANNER_TIMEOUT	( 2 * BANNER_TIMEOUT )
 
 /*
@@ -112,7 +112,7 @@ FILE_LICENCE ( GPL2_OR_LATER_OR_UBDL );
 //#define	IMAGE_SCRIPT		/* iPXE script image support */
 //#define	IMAGE_BZIMAGE		/* Linux bzImage image support */
 //#define	IMAGE_COMBOOT		/* SYSLINUX COMBOOT image support */
-//#define	IMAGE_EFI		/* EFI image support */
+#define	IMAGE_EFI		/* EFI image support */
 //#define	IMAGE_SDI		/* SDI image support */
 //#define	IMAGE_PNM		/* PNM image support */
 #define	IMAGE_PNG		/* PNG image support */
@@ -140,21 +140,21 @@ FILE_LICENCE ( GPL2_OR_LATER_OR_UBDL );
 #define LOGIN_CMD		/* Login command */
 #define SYNC_CMD		/* Sync command */
 #define SHELL_CMD		/* Shell command */
-//#define NSLOOKUP_CMD		/* DNS resolving command */
+#define NSLOOKUP_CMD		/* DNS resolving command */
 //#define TIME_CMD		/* Time commands */
 //#define DIGEST_CMD		/* Image crypto digest commands */
 //#define LOTEST_CMD		/* Loopback testing commands */
 //#define VLAN_CMD		/* VLAN commands */
-//#define PXE_CMD		/* PXE commands */
-//#define REBOOT_CMD		/* Reboot command */
-//#define POWEROFF_CMD		/* Power off command */
+#define PXE_CMD		/* PXE commands */
+#define REBOOT_CMD		/* Reboot command */
+#define POWEROFF_CMD		/* Power off command */
 //#define IMAGE_TRUST_CMD	/* Image trust management commands */
 //#define PCI_CMD		/* PCI commands */
 //#define PARAM_CMD		/* Request parameter commands */
 //#define NEIGHBOUR_CMD		/* Neighbour management commands */
-//#define PING_CMD		/* Ping command */
-//#define CONSOLE_CMD		/* Console command */
-//#define IPSTAT_CMD		/* IP statistics commands */
+#define PING_CMD		/* Ping command */
+#define CONSOLE_CMD		/* Console command */
+#define IPSTAT_CMD		/* IP statistics commands */
 //#define PROFSTAT_CMD		/* Profiling commands */
 //#define NTP_CMD		/* NTP commands */
 //#define CERT_CMD		/* Certificate management commands */
