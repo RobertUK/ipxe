@@ -1,6 +1,6 @@
 #!ipxe
  console --x 1024 --y 768
- console --picture http://www.itthings.co.uk/img/logo800x600.png 
+ console --picture http://www.itthings.co.uk/img/logo/800x600.png 
  #--left 32 --right 32 --top 32 --bottom 48
 dhcp
 chain tftp://${next-server}/main.ipxe || shell\
