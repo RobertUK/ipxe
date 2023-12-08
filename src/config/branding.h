@@ -25,7 +25,7 @@ FILE_LICENCE ( GPL2_OR_LATER_OR_UBDL );
  *
  */
 #define PRODUCT_NAME ""
-#define PRODUCT_SHORT_NAME "iPXE"
+#define PRODUCT_SHORT_NAME "iPXE ITTHINGS"
 #define PRODUCT_URI "https://ipxe.org"
 
 /*
@@ -35,7 +35,7 @@ FILE_LICENCE ( GPL2_OR_LATER_OR_UBDL );
  * by "iPXE", then the standard tag line "Open Source Network Boot
  * Firmware" is unlikely to fit neatly onto the screen.
  */
-#define PRODUCT_TAG_LINE "Open Source Network Boot Firmware"
+#define PRODUCT_TAG_LINE "Open Source Network Boot Firmware for ITTHINGS"
 
 /*
  * Error messages
@@ -185,7 +185,7 @@ FILE_LICENCE ( GPL2_OR_LATER_OR_UBDL );
  * is fixed (unless the upstream IPXE_SBAT_GENERATION has already been
  * incremented as part of that fix).
  */
-#define PRODUCT_SBAT_GENERATION 0
+#define PRODUCT_SBAT_GENERATION 1
 
 #include <config/local/branding.h>
 

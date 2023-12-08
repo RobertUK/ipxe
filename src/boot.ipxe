@@ -1,0 +1,113 @@
+#!ipxe
+
+
+:sets
+
+set http-port 		80
+set menu-file 		menu.ipxe
+set boot-url 		http://${next-server}:${http-port}
+set boot-url-tftp 	tftp://${next-server}
+set boot-url-http-dns 	http://boot/
+set timeout 		2000
+#set boot-image bg.png  #set the bg image, build ipxe with console vesa frame buffer and png defined in config header before compiling or it won't work. Example here means placing bg.png on base path of boot server: e.g: http://maa-boot-srv.com:8080/bg.png
+
+# Only use this if you compiled your ipxe with console and png options see http://ipxe.org/cmd/console
+# I've been jolly nice here and provided you with a nice background image that looks pretty. https://github.com/robertuk/ipxe/blob/master/mg.png.png
+console --x 1024 --y 768  # old fasioned
+console --picture bg.png || echo using tftp bg instead && console --picture ${boot-url-tftp}/${boot-image}  #1024x768 Graphic
+
+
+:root_menu
+menu ipxe 
+item         continue   Continue
+item --key d debug      Debug
+choose --default continue --timeout ${timeout} target && goto ${target}
+
+:continue
+echo next-server... 066........ ${next-server}
+echo port.......... (default).. ${http-port}
+echo filename...... 067........ ${filename} || (unset so using ${menu-file})
+set menu  ${filename} || ${menu-file}
+echo boot-url: ${boot-url}/${menu}
+sleep 3
+chain --autofree ${boot-url}/${menu} || goto tftp
+
+:tftp
+echo boot failure, trying tftp:  ${menu-url-tftp}/${menu-file}
+sleep 3
+chain --autofree ${menu-url-tftp}/${menu-file} || goto http-dns
+
+:http-dns
+echo boot failure, trying http-dns: ${boot-url-http-dns}
+sleep 3
+chain --autofree ${boot-url-http-dns} || goto failure
+
+:failure
+echo It's gone wrong, sorry :'(
+echo Dropping to ipxe shell in a few seconds...
+sleep 5
+shell
+
+:success
+echo ok!
+exit 0
+
+:debug
+# PXE error codes        http://h18013.www1.hp.com/products/servers/management/rdp/knowledgebase/00000138.html
+# Ascii to Hec convertor http://easycalculation.com/ascii-hex.php
+#In the same way that option 43 is an option space containing vendor-encapsulated options,
+# gPXE/iPXE uses option 175 to contain gPXE-specific encapsulated options.
+
+:first_page
+echo Client Fields___ Option_ Value_________________________________________________
+echo manufacturer.... ....... ${manufacturer}
+echo product......... ....... ${product}
+echo serial.......... ....... ${serial}
+echo asset........... ....... ${asset}
+echo mac............. ....... ${mac}
+echo uuid............ 097.... ${uuid}
+echo busid........... 175.177 ${busid}#can be used to chainload
+echo user class...... 077.... ${user-class}
+echo
+echo DHCP Fields_____ Option_ Value_________________________________________________
+echo dhcp-server..... 054.... ${dhcp-server}
+echo domain.......... 015.... ${domain}
+echo hostname........ 012.... ${hostname}
+echo ip.............. 050.... ${ip}
+echo netmask......... 001.... ${netmask}
+echo gateway......... 003.... ${gateway}
+echo dns............. 006.... ${dns}
+echo syslog.......... 007.... ${7:ipv4} / "${syslog}" (if support compiled)
+echo ntp-server...... 042.... ${42:ipv4}
+echo
+echo next-server..... 066.... ${next-server}
+echo filename........ 067.... ${filename}
+echo
+prompt Press any key to continue...
+
+:second_page
+echo DHCP options____ Option_ Value_________________________________________________
+echo priority........ 175.001 ${priority:hex}
+echo no-pxedhcp...... 175.176 ${175.176:hex}
+echo use-cached...... 175.178 ${use-cached:hex}
+echo scriptlet....... 175.081 ${scriptlet}
+echo bios-drive...... 175.189 ${189}#what is this for???
+echo version-code.... 175.235 ${235}#what is this for???
+echo
+echo San settings____ Option_ Value_________________________________________________
+echo keep-san........ 175.008 ${keep-san:hex}
+echo skip-san-boot... 175.009 ${skip-san-boot}
+echo root-path....... 017.... ${root-path}    #iscsi:<servername (domain name, ipv4)>:[protocol (6)]:[port (3260)]:[LUN (0)]:<targetname (IQN)>
+echo initiator-iqn... 203.... ${initiator-iqn}    #iscsi:my.target.dns.name::::iqn.2007-08.name.dns.target.my:iscsiboot #[Serva32/64 forbid ascii use]
+echo
+echo Authenticaition_ Option_ Value_________________________________________________
+echo username........ 175.190 ${username}        
+echo password........ 175.191 *
+echo reverse-username 175.192 ${reverse-username}
+echo reverse-password 175.193 *
+echo
+#Go in windows character map, select system font, 0x100+ascii code for letter in key.h [ http://git.ipxe.org/ipxe.git/blob/HEAD:/src/include/ipxe/keys.h ]
+prompt --key 0x141 Press UP to go back to the first page or any other key to continue... && continue || #IP
+#goto first_page ||    #UP
+
+

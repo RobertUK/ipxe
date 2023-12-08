@@ -1,0 +1,15 @@
+#!ipxe
+ console --picture http://boot/bg.png--left 32 --right 32 --top 32 --bottom 48
+
+
+prompt --key 0x02 --timeout 2000 Press Ctrl-B for the iPXE command line... && shell
+sleep 1
+prompt --key 0x03 --timeout 2000 Press Ctrl-C for the iPXE config tool... && tool
+sleep 1
+set syslog 192.168.0.6
+set uri tftp://${next-server}/main.ipxe 
+:loading
+loading from  ${uri}  
+sleep 2
+chain ${uri} ||   
+goto loading
